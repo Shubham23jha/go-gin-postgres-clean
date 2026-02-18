@@ -1,0 +1,13 @@
+CREATE TABLE reward (
+  "ID" SERIAL PRIMARY KEY,
+
+  "userID" INT NOT NULL UNIQUE,
+
+  "coin" BIGINT DEFAULT 0,
+
+  CONSTRAINT fk_reward
+    FOREIGN KEY ("userID")
+    REFERENCES users("ID")
+    ON DELETE CASCADE
+);
+
