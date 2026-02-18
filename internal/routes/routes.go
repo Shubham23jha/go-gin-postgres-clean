@@ -1,14 +1,40 @@
 package routes
 
 import (
+	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
+	"github.com/Shubham23jha/go-gin-postgres-clean/internal/middleware"
 	"github.com/gin-gonic/gin"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/handler"
 )
 
-func Register(r *gin.Engine, userHandler *handler.UserHandler) {
-	api := r.Group("/api/users")
+func Register(r *gin.Engine, app *bootstrap.App) {
+
+	api := r.Group("/api")
+
+	// =========================
+	// AUTH ROUTES
+	// =========================
+
+	auth := api.Group("/auth")
 	{
-		api.POST("/", userHandler.Create)
-		api.GET("/", userHandler.GetAll)
+		// Public APIs
+		auth.POST("/signup",app.AuthHandler.Register)
+
+		auth.POST("/login", app.AuthHandler.Login)
+
+		auth.POST("/refresh", app.AuthHandler.Refresh)
+
+		auth.POST("/logout", app.AuthHandler.Logout)
+
+		// Protected APIs
+		authProtected := auth.Group("/")
+		authProtected.Use(
+			middleware.AuthMiddleware(),
+		)
+		{
+			authProtected.POST(
+				"/logout-all",
+				app.AuthHandler.LogoutAll,
+			)
+		}
 	}
 }

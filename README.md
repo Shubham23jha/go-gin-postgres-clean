@@ -66,3 +66,17 @@ go-gin-postgres-clean/
 ├── go.mod                      # Go module definition
 └── go.sum                      # Dependency checksums
 ```
+
+
+## create Migration
+```
+migrate create -ext sql -dir migrations -seq add_orders_table
+
+```
+
+## check Version
+
+```
+migrate -path migrations -database "<DB_URL>" version
+
+```

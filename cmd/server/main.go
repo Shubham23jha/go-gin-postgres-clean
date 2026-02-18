@@ -6,12 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/config"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/handler"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/repository"
+	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/routes"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
 	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
-
 )
 
 func main() {
@@ -32,16 +29,12 @@ func main() {
 
 	database.RunMigrations(dbURL)
 
-	// Layers
-	userRepo := repository.NewUserRepository(database.DB)
-	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService)
+	app := bootstrap.NewApp(database.DB)
 
 	// Server
 	r := gin.Default()
-	routes.Register(r, userHandler)
+
+	routes.Register(r, app)
 
 	r.Run(":" + config.GetEnv("PORT"))
 }
-
-

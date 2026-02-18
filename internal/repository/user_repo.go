@@ -10,16 +10,41 @@ type userRepo struct {
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
-
-	return &userRepo{db}
+	return &userRepo{db: db}
 }
 
 func (r *userRepo) Create(user *models.User) error {
 	return r.db.Create(user).Error
 }
 
-func (r *userRepo) FindAll() ([]models.User, error) {
-	var users []models.User
-	err := r.db.Find(&users).Error
-	return users, err
+func (r *userRepo) FindByEmail(email string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) FindByNumber(number string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("phoneNumber = ?", number).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) GetByEmail(email string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) GetByPhone(phoneNumber string) (*models.User, error){
+	var user models.User
+	if err := r.db.Where("phoneNumber = ?", phoneNumber).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }

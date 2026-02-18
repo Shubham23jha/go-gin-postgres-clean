@@ -5,6 +5,7 @@ import (
 )
 
 type UserService interface {
-	CreateUser(user *models.User) error
-	GetUsers() ([]models.User, error)
+	Register(user models.RegisterRequest) error
+	LoginWithEmail(email string, password string, deviceID string, deviceName string, browser string, ip string) (string,string,error)
+	LoginWithPhone(phoneNumber string, password string,deviceID string, deviceName string, browser string, ip string) (string,string, error)
 }
