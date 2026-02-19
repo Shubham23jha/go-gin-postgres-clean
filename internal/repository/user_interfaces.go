@@ -8,5 +8,6 @@ type UserRepository interface {
 	FindByNumber(number string) (*models.User, error)
 	GetByEmail(email string) (*models.User, error)
 	GetByPhone(phoneNumber string) (*models.User, error)
+	MarkVerified(userID uint) error
 	
 }

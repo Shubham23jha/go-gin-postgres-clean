@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/repository"
@@ -48,11 +49,11 @@ func (s *userService) LoginWithPhone(phoneNumber string, password string, device
 
 	user, err := s.repo.GetByPhone(phoneNumber)
 	if err != nil {
-		return "", "",errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	if !user.CheckPassword(password) {
-		return "","", errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	count, _ := s.sessionRepo.CountActive(user.ID)
@@ -63,25 +64,50 @@ func (s *userService) LoginWithPhone(phoneNumber string, password string, device
 
 	accessToken, err := utils.GenerateAccessToken(user.ID, user.Email)
 	if err != nil {
-		return "","", err
+		return "", "", err
 	}
 
 	refreshToken, err := utils.GenerateRefreshToken(user.ID, user.Email)
 	if err != nil {
 		return "", "", err
+	}
+	// =========================
+	// Create Session
+	// =========================
+	session := &models.UserSession{
+		UserID:       user.ID,
+		RefreshToken: refreshToken,
+		DeviceID:     deviceID,
+		DeviceName:   deviceName,
+		Browser:      browser,
+		IPAddress:    ip,
+		IsActive:     true,
+		ExpiresAt:    time.Now().Add(7 * 24 * time.Hour),
+	}
+
+	err = s.sessionRepo.Create(session)
+	if err != nil {
+		return "", "", err
+	}
+
+	// =========================
+	// Mark Verified
+	// =========================
+	if !user.IsVerified {
+		_ = s.repo.MarkVerified(user.ID)
 	}
 	return accessToken, refreshToken, nil
 }
 
-func (s *userService) LoginWithEmail(email string, password string, deviceID string, deviceName string, browser string, ip string) (string,string, error) {
+func (s *userService) LoginWithEmail(email string, password string, deviceID string, deviceName string, browser string, ip string) (string, string, error) {
 
 	user, err := s.repo.GetByEmail(email)
 	if err != nil {
-		return "","", errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	if !user.CheckPassword(password) {
-		return "","", errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	count, _ := s.sessionRepo.CountActive(user.ID)
@@ -92,12 +118,38 @@ func (s *userService) LoginWithEmail(email string, password string, deviceID str
 
 	accessToken, err := utils.GenerateAccessToken(user.ID, user.Email)
 	if err != nil {
-		return "","", err
+		return "", "", err
 	}
 
 	refreshToken, err := utils.GenerateRefreshToken(user.ID, user.Email)
 	if err != nil {
 		return "", "", err
+	}
+
+	// =========================
+	// Create Session
+	// =========================
+	session := &models.UserSession{
+		UserID:       user.ID,
+		RefreshToken: refreshToken,
+		DeviceID:     deviceID,
+		DeviceName:   deviceName,
+		Browser:      browser,
+		IPAddress:    ip,
+		IsActive:     true,
+		ExpiresAt:    time.Now().Add(7 * 24 * time.Hour),
+	}
+
+	err = s.sessionRepo.Create(session)
+	if err != nil {
+		return "", "", err
+	}
+
+	// =========================
+	// Mark Verified
+	// =========================
+	if !user.IsVerified {
+		_ = s.repo.MarkVerified(user.ID)
 	}
 	return accessToken, refreshToken, nil
 }

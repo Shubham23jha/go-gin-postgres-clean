@@ -38,14 +38,12 @@ func (r *sessionRepository) CountActive(
 	return count, err
 }
 
-func (r *sessionRepository) FindByRefreshToken(
-	token string,
-) (*models.UserSession, error) {
+func (r *sessionRepository) FindByRefreshToken(token string) (*models.UserSession, error) {
 
 	var session models.UserSession
 
 	err := r.db.
-		Where("refreshToken = ?", token).
+		Where(`"refreshToken" = ?`, token).
 		First(&session).Error
 
 	return &session, err

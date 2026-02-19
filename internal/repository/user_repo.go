@@ -48,3 +48,13 @@ func (r *userRepo) GetByPhone(phoneNumber string) (*models.User, error){
 	}
 	return &user, nil
 }
+
+func (r *userRepo) MarkVerified(userID uint) error {
+
+	return r.db.
+		Model(&models.User{}).
+		Where(`"ID" = ?`, userID).
+		Update("isVerified", true).
+		Error
+}
+

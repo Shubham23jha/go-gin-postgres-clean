@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
+	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/utils"
 )
 
 type AuthHandler struct {
@@ -210,7 +211,9 @@ func (h *AuthHandler) LogoutAll(c *gin.Context) {
 func (h *AuthHandler) Refresh(c *gin.Context) {
 
 	//Read refresh cookie
-	refreshToken, err :=c.Cookie("refresh_token")
+	refreshToken, err := c.Cookie("refresh_token")
+
+	fmt.Println("Refresh Token:", refreshToken)
 
 	if err != nil {
 		c.JSON(401, gin.H{
@@ -219,7 +222,7 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		return
 	}
 
-	claims, err :=utils.ValidateRefreshToken(refreshToken)
+	claims, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
 		c.JSON(401, gin.H{"error": "invalid"})
 		return
@@ -232,7 +235,7 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		})
 		return
 	}
-	accessToken, err := utils.GenerateAccessToken(claims.UserID,claims.Email)
+	accessToken, err := utils.GenerateAccessToken(claims.UserID, claims.Email)
 
 	if err != nil {
 		c.JSON(500, gin.H{
