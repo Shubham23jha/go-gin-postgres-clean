@@ -2,7 +2,7 @@ CREATE TABLE payment (
   "ID" SERIAL PRIMARY KEY,
 
   "userID" INT NOT NULL
-    REFERENCES users(id),
+    REFERENCES users("ID"),
 
   "paymentAmount" DECIMAL(10,2),
   status VARCHAR,

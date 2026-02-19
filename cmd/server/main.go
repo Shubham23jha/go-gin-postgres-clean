@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/config"
@@ -29,10 +30,28 @@ func main() {
 
 	database.RunMigrations(dbURL)
 
-	app := bootstrap.NewApp(database.DB)
+	app, err := bootstrap.InitializeApp(database.DB)
+	if err != nil {
+		panic(err)
+	}
 
 	// Server
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			"http://localhost:3000",
+		},
+		AllowMethods: []string{
+			"GET", "POST", "PUT", "DELETE",
+		},
+		AllowHeaders: []string{
+			"Origin",
+			"Content-Type",
+			"Authorization",
+		},
+		AllowCredentials: true,
+	}))
 
 	routes.Register(r, app)
 

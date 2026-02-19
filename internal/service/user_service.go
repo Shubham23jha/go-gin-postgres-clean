@@ -13,7 +13,7 @@ type userService struct {
 	sessionRepo repository.SessionRepository
 }
 
-func NewUserService(r repository.UserRepository, sr repository.SessionRepository) *userService {
+func NewUserService(r repository.UserRepository, sr repository.SessionRepository) UserService {
 	return &userService{
 		repo:        r,
 		sessionRepo: sr,

@@ -10,7 +10,7 @@ import (
 
 func RunMigrations(dbURL string) {
 	m, err := migrate.New(
-		"file://migrations",
+		"file://../../migrations",
 		dbURL,
 	)
 	if err != nil {
