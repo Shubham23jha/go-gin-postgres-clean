@@ -1,0 +1,32 @@
+# Binaries for programs
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+*-test
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories (these are managed by go.mod/go.sum)
+vendor/
+
+# Environment files
+.env
+
+# Various IDEs and OS files (optional, can also be set globally)
+# JetBrains IDEs (GoLand, IntelliJ, etc.)
+.idea/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
