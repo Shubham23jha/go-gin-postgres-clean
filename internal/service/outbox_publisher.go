@@ -31,14 +31,18 @@ func NewOutboxPublisher(repo repository.CampaignRepository, amqpURL string) Outb
 		log.Fatalf("failed to open a channel: %s", err)
 	}
 
-	// Declare Queue
+	// Declare Queue with DLX configuration
+	args := amqp.Table{
+		"x-dead-letter-exchange":    "email_dlx",
+		"x-dead-letter-routing-key": "email_failed",
+	}
 	_, err = ch.QueueDeclare(
 		"email_queue", // name
 		true,          // durable
 		false,         // delete when unused
 		false,         // exclusive
 		false,         // no-wait
-		nil,           // arguments
+		args,          // arguments
 	)
 	if err != nil {
 		log.Fatalf("failed to declare a queue: %s", err)

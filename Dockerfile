@@ -17,6 +17,7 @@ COPY . .
 RUN go build -o api-server ./cmd/server/main.go
 RUN go build -o publisher ./cmd/publisher/main.go
 RUN go build -o worker ./cmd/worker/main.go
+RUN go build -o dashboard ./cmd/dashboard/main.go
 
 # Final Stage (Standard Alpine for a tiny image)
 FROM alpine:latest
@@ -27,6 +28,8 @@ WORKDIR /app
 COPY --from=builder /app/api-server .
 COPY --from=builder /app/publisher .
 COPY --from=builder /app/worker .
+COPY --from=builder /app/dashboard .
+COPY --from=builder /app/cmd/dashboard/web ./web
 COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/.env .
 

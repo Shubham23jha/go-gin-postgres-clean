@@ -13,4 +13,4 @@ spec:
       queueName: email_queue
       hostFromEnv: RABBITMQ_HOST # KEDA will look for the connection string
       mode: QueueLength
-      value: "5" # Scale up for every 5 messages in the queue
+      value: "2" # Scale up for every 2 messages in the queue (for better visualization)
