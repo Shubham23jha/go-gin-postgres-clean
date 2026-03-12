@@ -1,5 +1,5 @@
 # Build Stage
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
@@ -31,7 +31,6 @@ COPY --from=builder /app/worker .
 COPY --from=builder /app/dashboard .
 COPY --from=builder /app/cmd/dashboard/web ./web
 COPY --from=builder /app/migrations ./migrations
-COPY --from=builder /app/.env .
 
 # We don't set a default CMD here because we will override it in K8s/Docker-Compose
 # But for safety, we can default to the API server
