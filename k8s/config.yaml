@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: email-system-config
+data:
+  APP_ENV: "production"
+  PORT: "8080"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USER: "postgres"
+  DB_NAME: "goDb"
+  DB_SSLMODE: "disable"
+  RABBITMQ_HOST: "rabbitmq"
+  RABBITMQ_PORT: "5672"
+  SMTP_HOST: "sandbox.smtp.mailtrap.io"
+  SMTP_PORT: "2525"
+  SMTP_SENDER: "noreply@gmail.com"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: email-system-secrets
+type: Opaque
+data:
+  # Base64 encoded values (placeholders)
+  DB_PASSWORD: "U2h1YmhhbUAyMTA4Mg==" # Shubham@21082
+  RABBITMQ_USER: "Z3Vlc3Q=" # guest
+  RABBITMQ_PASS: "Z3Vlc3Q=" # guest
+  SMTP_USER: "MGNmYzU4NWJlYzBhOTc=" # 0cfc585bec0a97
+  SMTP_PASS: "ODgzNzBmYmMyOWFhNzg=" # 88370fbc29aa78

@@ -9,12 +9,15 @@ import (
 )
 
 func RunMigrations(dbURL string) {
-	m, err := migrate.New(
-		"file://../../migrations",
-		dbURL,
-	)
+	// Try root first
+	m, err := migrate.New("file://migrations", dbURL)
 	if err != nil {
-		log.Fatal(err)
+		// Try two levels up
+		m, err = migrate.New("file://../../migrations", dbURL)
+	}
+
+	if err != nil {
+		log.Fatal("❌ Failed to initialize migrations:", err)
 	}
 
 	if err := m.Up(); err != nil && err.Error() != "no change" {

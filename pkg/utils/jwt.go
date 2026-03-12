@@ -1,3 +1,4 @@
+// Package utils provides various utility functions for the application, including JWT handling.
 package utils
 
 import (

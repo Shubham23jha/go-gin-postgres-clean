@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -54,6 +55,14 @@ func main() {
 	}))
 
 	routes.Register(r, app)
+
+	// In Distributed Mode (K8s), these will run as separate pods.
+	// For local development, we can still start them if needed.
+	if config.GetEnv("RUN_BACKGROUND_SERVICES") == "true" {
+		log.Println("⏳ Starting background services (Monolith Mode)...")
+		go app.Publisher.Start(nil)
+		go app.WorkerPool.Start(nil)
+	}
 
 	r.Run(":" + config.GetEnv("PORT"))
 }

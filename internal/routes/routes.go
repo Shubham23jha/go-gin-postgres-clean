@@ -37,4 +37,13 @@ func Register(r *gin.Engine, app *bootstrap.App) {
 			)
 		}
 	}
+
+	// =========================
+	// CAMPAIGN ROUTES
+	// =========================
+	campaigns := api.Group("/campaigns")
+	{
+		campaigns.POST("/", app.CampaignHandler.Create)
+		campaigns.GET("/:id", app.CampaignHandler.Get)
+	}
 }

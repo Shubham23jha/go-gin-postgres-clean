@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-publisher
+  template:
+    metadata:
+      labels:
+        app: email-publisher
+    spec:
+      containers:
+      - name: email-publisher
+        image: email-system:latest
+        command: ["./publisher"]
+        envFrom:
+        - configMapRef:
+            name: email-system-config
+        - secretRef:
+            name: email-system-secrets

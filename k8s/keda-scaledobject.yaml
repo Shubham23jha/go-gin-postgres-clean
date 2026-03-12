@@ -1,0 +1,16 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: email-worker-scaler
+spec:
+  scaleTargetRef:
+    name: email-worker # Must match the Deployment name
+  minReplicaCount: 0 # Save money/resources when queue is empty!
+  maxReplicaCount: 10 # Scale up to 10 workers during peaks
+  triggers:
+  - type: rabbitmq
+    metadata:
+      queueName: email_queue
+      hostFromEnv: RABBITMQ_HOST # KEDA will look for the connection string
+      mode: QueueLength
+      value: "5" # Scale up for every 5 messages in the queue

@@ -17,14 +17,18 @@ migrate create -ext sql -dir migrations -seq <name>
 
 ### Run migrations (up)
 Requires `DB_URL` environment variable.
-```bash
-migrate -path migrations -database "${DB_URL}" up
+**PowerShell:**
+```powershell
+$env:DB_URL="postgresql://postgres:Shubham@21082@localhost:5432/goDb?sslmode=disable"
+migrate -path migrations -database $env:DB_URL up
 ```
 
 ### Rollback migrations (down)
 Requires `DB_URL` environment variable.
-```bash
-migrate -path migrations -database "${DB_URL}" down 1
+**PowerShell:**
+```powershell
+$env:DB_URL="postgresql://postgres:Shubham@21082@localhost:5432/goDb?sslmode=disable"
+migrate -path migrations -database $env:DB_URL down 1
 ```
 
 ### Check migration version

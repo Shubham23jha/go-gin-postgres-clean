@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-worker
+spec:
+  replicas: 0 # Start with 0, KEDA will scale this up!
+  selector:
+    matchLabels:
+      app: email-worker
+  template:
+    metadata:
+      labels:
+        app: email-worker
+    spec:
+      containers:
+      - name: email-worker
+        image: email-system:latest
+        command: ["./worker"]
+        envFrom:
+        - configMapRef:
+            name: email-system-config
+        - secretRef:
+            name: email-system-secrets
