@@ -8,6 +8,7 @@ import (
 type CampaignService interface {
 	CreateCampaign(req models.CreateCampaignRequest) (*models.Campaign, error)
 	GetCampaign(id uint) (*models.Campaign, error)
+	GetAllCampaigns() ([]models.Campaign, error)
 }
 
 type campaignService struct {
@@ -36,4 +37,8 @@ func (s *campaignService) CreateCampaign(req models.CreateCampaignRequest) (*mod
 
 func (s *campaignService) GetCampaign(id uint) (*models.Campaign, error) {
 	return s.repo.FindByID(id)
+}
+
+func (s *campaignService) GetAllCampaigns() ([]models.Campaign, error) {
+	return s.repo.FindAll()
 }

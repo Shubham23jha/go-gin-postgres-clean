@@ -15,6 +15,7 @@ type CampaignRepository interface {
 	UpdateOutboxStatus(id uint, status models.OutboxStatus) error
 	CreateEmailLog(log *models.EmailLog) error
 	IsMessageProcessed(messageID string) (bool, error)
+	FindAll() ([]models.Campaign, error)
 }
 
 type campaignRepository struct {
@@ -81,4 +82,10 @@ func (r *campaignRepository) IsMessageProcessed(messageID string) (bool, error) 
 	var count int64
 	err := r.db.Model(&models.EmailLog{}).Where("message_id = ? AND status = ?", messageID, "SUCCESS").Count(&count).Error
 	return count > 0, err
+}
+
+func (r *campaignRepository) FindAll() ([]models.Campaign, error) {
+	var campaigns []models.Campaign
+	err := r.db.Order("created_at desc").Find(&campaigns).Error
+	return campaigns, err
 }

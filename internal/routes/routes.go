@@ -43,6 +43,7 @@ func Register(r *gin.Engine, app *bootstrap.App) {
 	// =========================
 	campaigns := api.Group("/campaigns")
 	{
+		campaigns.GET("/", app.CampaignHandler.List)
 		campaigns.POST("/", app.CampaignHandler.Create)
 		campaigns.GET("/:id", app.CampaignHandler.Get)
 	}

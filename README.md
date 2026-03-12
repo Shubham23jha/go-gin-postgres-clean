@@ -1,6 +1,6 @@
 # Distributed Email Delivery System (Mini-Mailchimp) 📧🚀
 
-A robust, high-throughput email delivery system built with **Go**, **Postgres**, **RabbitMQ**, and orchestrated with **Kubernetes** + **KEDA**. Featuring a live **Scaling Visualization Dashboard**.
+A robust, high-throughput email delivery system built with **Go**, **Postgres**, **RabbitMQ**, and orchestrated with **Kubernetes** + **KEDA**. Featuring a real-time **Scaling Visualization Dashboard**.
 
 ---
 
@@ -16,103 +16,88 @@ The system uses the **Transactional Outbox Pattern** to ensure "at-least-once" d
 
 ---
 
-## 🚀 Step-by-Step Local Setup (Kubernetes + KEDA)
+## 🚀 Step-by-Step Local Setup
 
 To showcase the full system with autoscaling, follow these steps:
 
 ### 1. Pre-requisites
-- **Docker Desktop** (with Kubernetes enabled) or **Minikube**.
-- **Go 1.24**.
-- **KEDA** installed in your cluster.
+- **Docker Desktop** (Kubernetes enabled) or **Minikube**.
+- **KEDA** installed:
+  ```bash
+  kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.16.1/keda-2.16.1.yaml
+  ```
 
-### 2. Install KEDA (If not present)
-```powershell
-kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.16.1/keda-2.16.1.yaml
-```
-
-### 3. Start Infrastructure
-We use Kubernetes for everything. Start by deploying the database and RabbitMQ:
-```powershell
+### 2. Start Infrastructure
+Deploy the database and RabbitMQ directly to the cluster:
+```bash
 kubectl apply -f k8s/infrastructure.yaml
 ```
 
-### 4. Build & Load Application
-Build the unified Docker image and load it into your local cluster:
-```powershell
+### 3. Build & Load Application
+Build the unified Docker image (current version: **v2**) and load it:
+```bash
 # Build image
-docker build -t email-system:v1 .
+docker build -t email-system:v2 .
 
 # If using Minikube
-minikube image load email-system:v1
+minikube image load email-system:v2
 ```
 
-### 5. Deploy Application
+### 4. Deploy Application
 Apply all application manifests:
-```powershell
+```bash
 kubectl apply -f k8s/
 ```
 
-### 6. Verify Scaling Activity
-1.  **Open Dashboard**: Use Minikube to get the URL:
-    ```powershell
-    minikube service scaling-dashboard-service --url
-    ```
-2.  **Watch Pods**:
-    ```powershell
-    kubectl get pods -w
-    ```
-3.  **Trigger Campaign**:
-    Send a campaign with multiple recipients (e.g., 10+) to see KEDA scale up workers:
-    ```powershell
-    # Get API URL
-    minikube service email-api --url
-    
-    # Send Request (replace URL)
-    curl.exe -X POST http://<URL>/api/campaigns/ `
-    -H "Content-Type: application/json" `
-    -d "{\`"subject\`": \`"Scaling Test\`", \`"body\`": \`"Hello!\`", \`"recipients\`": [\`"u1@ex.com\`", \`"u2@ex.com\`", ...]}"
-    ```
+### 5. Verify & Showcase
+
+#### A. Open the Scaling Dashboard
+Copy the URL and open it in your browser:
+```bash
+minikube service scaling-dashboard-service --url
+```
+
+#### B. Verify API Status
+Ensure the API is reachable (returns all campaigns):
+```bash
+# Get API URL
+minikube service email-api --url
+
+# Verify (replace <URL>)
+curl <URL>/api/campaigns/
+```
+
+#### C. Trigger Scaling Demo
+Send a campaign with 10 recipients. **Choose the command for your terminal type:**
+
+**For BASH (Git Bash, WSL, Linux, macOS):**
+```bash
+curl -X POST <API_URL>/api/campaigns/ \
+-H 'Content-Type: application/json' \
+-d '{"subject": "Scaling Test", "body": "Hello!", "recipients": ["u1@ex.com", "u2@ex.com", "u3@ex.com", "u4@ex.com", "u5@ex.com", "u6@ex.com", "u7@ex.com", "u8@ex.com", "u9@ex.com", "u10@ex.com"]}'
+```
+
+**For POWERSHELL:**
+```powershell
+curl.exe -X POST <API_URL>/api/campaigns/ `
+-H "Content-Type: application/json" `
+-d "{\`"subject\`": \`"Scaling Test\`", \`"body\`": \`"Hello!\`", \`"recipients\`": [\`"u1@ex.com\`", \`"u2@ex.com\`", \`"u3@ex.com\`", \`"u4@ex.com\`", \`"u5@ex.com\`", \`"u6@ex.com\`", \`"u7@ex.com\`", \`"u8@ex.com\`", \`"u9@ex.com\`", \`"u10@ex.com\`"]}"
+```
 
 ---
 
 ## 📁 Project Structure
 
-```bash
-├── cmd/
-│   ├── server/          # API Entrypoint
-│   ├── publisher/       # Standalone Outbox Publisher
-│   ├── worker/          # Standalone Email Worker
-│   └── dashboard/       # Scaling Visualization Dashboard
-├── k8s/                 # Kubernetes Manifests (Deployments, Config, KEDA)
-├── internal/
-│   ├── handlers/        # API Request Handlers
-│   ├── models/          # DB Schema & GORM Models
-│   ├── repository/      # Data Access Layer
-│   ├── service/         # Business Logic & Worker Pool
-│   └── bootstrap/       # Dependency Injection (Wire)
-├── pkg/
-│   ├── database/        # Postgres connection & Migrations
-│   └── utils/           # Shared Utilities (JWT, etc.)
-├── migrations/          # SQL Migration files
-└── .agents/             # AI Agent Skills & Workflows
-```
+- `cmd/`: Entrypoints for API, Publisher, Worker, and Dashboard.
+- `k8s/`: Kubernetes Manifests (Deployments, Config, KEDA).
+- `internal/`: Core business logic, Handlers, Models, and Repositories.
+- `migrations/`: SQL database schema migrations.
+- `.agents/`: AI Agent Skills (Automated DB migrations, K8s deploys, etc.).
 
 ---
 
-## 🛠️ Maintenance & AI Agent Skills
-This repository is "Agent-Ready." It includes specialized **Skills** in the `.agents/skills/` directory:
-
-- **`db-migrate`**: Manage SQL schema migrations.
-- **`docker-build`**: Standardized multi-stage image building.
-- **`go-lint`**: Enforce Go coding standards.
-- **`go-test`**: Run unit and integration test suites.
-- **`k8s-deploy`**: Orchestrate Kubernetes resource deployment.
-- **`wire-gen`**: Regenerate dependency injection code.
-
----
-
-## 🛡️ Key Features
-- **Transactional Outbox**: Ensures "at-least-once" delivery.
-- **Auto-Scaling**: KEDA handles worker resource allocation based on queue length.
-- **Idempotency**: Message IDs prevent duplicate emails.
-- **Real-time Monitoring**: Visual feedback on cluster state.
+## 🛠️ Maintenance (AI Agent Skills)
+This repository is optimized for AI assistance. Skills in `.agents/skills/` include:
+- `db-migrate`: Manage SQL schema.
+- `k8s-deploy`: Orchestrate cluster resources.
+- `wire-gen`: Regenerate dependency injection code.
