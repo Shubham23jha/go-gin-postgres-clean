@@ -1,0 +1,37 @@
+{
+	"name": "Distributed Email System",
+	"image": "mcr.microsoft.com/devcontainers/go:1-1.24-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+			"version": "latest"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.Go",
+				"ms-azuretools.vscode-docker",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
+			]
+		}
+	},
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"portsAttributes": {
+		"8080": {
+			"label": "API Server",
+			"onAutoForward": "notify"
+		},
+		"30080": {
+			"label": "Scaling Dashboard",
+			"onAutoForward": "openBrowser"
+		},
+		"15672": {
+			"label": "RabbitMQ Management",
+			"onAutoForward": "ignore"
+		}
+	},
+	"remoteUser": "vscode"
+}
