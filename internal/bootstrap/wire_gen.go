@@ -24,8 +24,14 @@ func InitializeApp(db *gorm.DB) (*App, error) {
 	campaignRepository := repository.NewCampaignRepository(db)
 	campaignService := service.NewCampaignService(campaignRepository)
 	campaignHandler := handlers.NewCampaignHandler(campaignService)
-	outboxPublisher := service.NewOutboxPublisher(campaignRepository, "amqp://guest:guest@localhost:5672/")
-	workerPool := service.NewWorkerPool(campaignRepository, "amqp://guest:guest@localhost:5672/", 5) // 5 concurrent workers
+	string2 := service.ProvideRabbitMQURL()
+	outboxPublisher := service.NewOutboxPublisher(campaignRepository, string2)
+	int2 := _wireIntValue
+	workerPool := service.NewWorkerPool(campaignRepository, string2, int2)
 	app := NewApp(authHandler, campaignHandler, outboxPublisher, workerPool)
 	return app, nil
 }
+
+var (
+	_wireIntValue = 5
+)

@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: email-api
-        image: email-system:latest
+        image: email-system:v1
+        imagePullPolicy: IfNotPresent
         command: ["./api-server"]
         ports:
         - containerPort: 8080

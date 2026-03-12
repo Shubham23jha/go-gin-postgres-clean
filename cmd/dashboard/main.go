@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,9 +9,6 @@ import (
 	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 )
 
 type Stats struct {
@@ -21,34 +17,22 @@ type Stats struct {
 }
 
 var (
-	clientset *kubernetes.Clientset
-	amqpConn  *amqp.Connection
-	amqpCh    *amqp.Channel
+	amqpConn *amqp.Connection
+	amqpCh   *amqp.Channel
 )
 
 func main() {
-	// 1. Setup Kubernetes Client
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		log.Printf("Not running in cluster, falling back to local proxy or skipping K8s stats: %v", err)
-	} else {
-		clientset, err = kubernetes.NewForConfig(config)
-		if err != nil {
-			log.Fatalf("Error creating k8s client: %v", err)
-		}
-	}
-
-	// 2. Setup RabbitMQ Connection
+	// 1. Setup RabbitMQ Connection
 	amqpURL := os.Getenv("RABBITMQ_URL")
 	if amqpURL == "" {
 		amqpURL = "amqp://guest:guest@localhost:5672/"
 	}
-	
+
 	connectRabbitMQ(amqpURL)
 	defer amqpConn.Close()
 	defer amqpCh.Close()
 
-	// 3. Serve Frontend and API
+	// 2. Serve Frontend and API
 	http.Handle("/", http.FileServer(http.Dir("./web")))
 	http.HandleFunc("/api/stats", statsHandler)
 
@@ -116,17 +100,15 @@ func getStats() Stats {
 		log.Printf("Error inspecting queue: %v", err)
 	}
 
-	// Get Active Workers from K8s
-	if clientset != nil {
-		deploy, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "email-worker", metav1.GetOptions{})
-		if err == nil {
-			stats.ActiveWorkers = int(deploy.Status.Replicas)
-		} else {
-			log.Printf("Error getting worker deployment: %v", err)
-		}
+	// Active Workers:
+	// Simulating KEDA scaling: 1 worker per 10 messages (min 1, max 10)
+	if stats.QueueLength == 0 {
+		stats.ActiveWorkers = 0
 	} else {
-		// Mock data for local testing if needed, or just 0
-		stats.ActiveWorkers = 0 
+		stats.ActiveWorkers = (stats.QueueLength / 10) + 1
+		if stats.ActiveWorkers > 10 {
+			stats.ActiveWorkers = 10
+		}
 	}
 
 	return stats

@@ -31,3 +31,9 @@ vendor/
 
 # Windows
 Thumbs.db
+
+# Project Binaries
+api-server
+publisher
+worker
+main.exe

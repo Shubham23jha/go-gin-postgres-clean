@@ -2,8 +2,6 @@
 
 A robust, high-throughput email delivery system built with **Go**, **Postgres**, **RabbitMQ**, and orchestrated with **Kubernetes** + **KEDA**. Featuring a live **Scaling Visualization Dashboard**.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Shubham23jha/go-gin-postgres-clean)
-
 ---
 
 ## 🏗️ Architecture
@@ -15,6 +13,65 @@ The system uses the **Transactional Outbox Pattern** to ensure "at-least-once" d
 4.  **Email Worker Pool**: A cluster of consumers that deliver emails via SMTP with exponential backoff and idempotency.
 5.  **KEDA**: Automatically scales Worker pods from **0 to 10** based on queue length.
 6.  **📊 Scaling Dashboard**: A real-time monitoring UI that visualizes queue growth and worker pod scaling.
+
+---
+
+## 🚀 Step-by-Step Local Setup (Kubernetes + KEDA)
+
+To showcase the full system with autoscaling, follow these steps:
+
+### 1. Pre-requisites
+- **Docker Desktop** (with Kubernetes enabled) or **Minikube**.
+- **Go 1.24**.
+- **KEDA** installed in your cluster.
+
+### 2. Install KEDA (If not present)
+```powershell
+kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.16.1/keda-2.16.1.yaml
+```
+
+### 3. Start Infrastructure
+We use Kubernetes for everything. Start by deploying the database and RabbitMQ:
+```powershell
+kubectl apply -f k8s/infrastructure.yaml
+```
+
+### 4. Build & Load Application
+Build the unified Docker image and load it into your local cluster:
+```powershell
+# Build image
+docker build -t email-system:v1 .
+
+# If using Minikube
+minikube image load email-system:v1
+```
+
+### 5. Deploy Application
+Apply all application manifests:
+```powershell
+kubectl apply -f k8s/
+```
+
+### 6. Verify Scaling Activity
+1.  **Open Dashboard**: Use Minikube to get the URL:
+    ```powershell
+    minikube service scaling-dashboard-service --url
+    ```
+2.  **Watch Pods**:
+    ```powershell
+    kubectl get pods -w
+    ```
+3.  **Trigger Campaign**:
+    Send a campaign with multiple recipients (e.g., 10+) to see KEDA scale up workers:
+    ```powershell
+    # Get API URL
+    minikube service email-api --url
+    
+    # Send Request (replace URL)
+    curl.exe -X POST http://<URL>/api/campaigns/ `
+    -H "Content-Type: application/json" `
+    -d "{\`"subject\`": \`"Scaling Test\`", \`"body\`": \`"Hello!\`", \`"recipients\`": [\`"u1@ex.com\`", \`"u2@ex.com\`", ...]}"
+    ```
 
 ---
 
@@ -37,77 +94,25 @@ The system uses the **Transactional Outbox Pattern** to ensure "at-least-once" d
 │   ├── database/        # Postgres connection & Migrations
 │   └── utils/           # Shared Utilities (JWT, etc.)
 ├── migrations/          # SQL Migration files
-└── Dockerfile           # Multi-stage Build for all services
+└── .agents/             # AI Agent Skills & Workflows
 ```
 
 ---
 
-## 🚀 Quick Start (Local Docker Compose)
+## 🛠️ Maintenance & AI Agent Skills
+This repository is "Agent-Ready." It includes specialized **Skills** in the `.agents/skills/` directory:
 
-The easiest way to see the system in action:
-
-1. **Pre-requisites**: Docker Desktop & Go 1.24.
-2. **Setup Env**: Copy `.env.example` to `.env` and add your [Mailtrap](https://mailtrap.io/) credentials.
-3. **Run Infrastructure**:
-   ```bash
-   docker-compose up -d
-   ```
-4. **Run Monolith Server**:
-   ```bash
-   SET RUN_BACKGROUND_SERVICES=true
-   go run cmd/server/main.go
-   ```
-
----
-
-## 📊 Live Scaling Visualization (Kubernetes)
-
-To witness KEDA dynamically scaling workers based on load:
-
-1. **Enable KEDA**:
-   ```bash
-   kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.16.1/keda-2.16.1.yaml
-   ```
-2. **Build & Deploy**:
-   ```bash
-   docker build -t email-system:latest .
-   kubectl apply -f k8s/
-   ```
-3. **Open Dashboard**: Visit `http://localhost:30080` to see the live scaling UI.
-4. **Trigger Scale Up**: Send ~20 emails via the API (see Testing section).
-
----
-
-## 🧪 Testing the Flow
-
-Create a campaign and watch it process automatically:
-
-```powershell
-curl -X POST http://localhost:8080/api/campaigns/ `
--H "Content-Type: application/json" `
--d '{
-  "subject": "Distributed Scale Test",
-  "body": "Hello from your autoscaling cluster!",
-  "recipients": ["user1@example.com", "user2@example.com", "user3@example.com"]
-}'
-```
-
----
-
-## 🛠️ Maintenance & Agent Skills
-This repository is "Agentic Ready." It includes specialized **Skills** in the `.agent/skills/` directory that AI agents (like Antigravity) can use to manage the project:
-
-- **`db-migrate`**: Automatic SQL schema migrations.
+- **`db-migrate`**: Manage SQL schema migrations.
 - **`docker-build`**: Standardized multi-stage image building.
-- **`go-lint`**: Enforces Go coding standards.
-- **`go-test`**: Runs unit and integration test suites.
-- **`k8s-deploy`**: Orchestrates Kubernetes resource deployment.
-- **`wire-gen`**: Regenerates dependency injection code.
+- **`go-lint`**: Enforce Go coding standards.
+- **`go-test`**: Run unit and integration test suites.
+- **`k8s-deploy`**: Orchestrate Kubernetes resource deployment.
+- **`wire-gen`**: Regenerate dependency injection code.
 
 ---
 
 ## 🛡️ Key Features
-- **Transactional Consistency**: Database-backed outbox ensures no lost emails.
-- **Auto-Scaling**: KEDA handles worker resource allocation efficiently.
-- **Idempotency**: Message IDs prevent duplicate emails during retries.
-- **Real-time Monitoring**: Visual feedback on cluster state and queue depth.
+- **Transactional Outbox**: Ensures "at-least-once" delivery.
+- **Auto-Scaling**: KEDA handles worker resource allocation based on queue length.
+- **Idempotency**: Message IDs prevent duplicate emails.
+- **Real-time Monitoring**: Visual feedback on cluster state.

@@ -11,6 +11,6 @@ spec:
   - type: rabbitmq
     metadata:
       queueName: email_queue
-      hostFromEnv: RABBITMQ_HOST # KEDA will look for the connection string
+      host: amqp://guest:guest@rabbitmq.default.svc.cluster.local:5672/ # FQDN for cross-namespace access
       mode: QueueLength
       value: "2" # Scale up for every 2 messages in the queue (for better visualization)

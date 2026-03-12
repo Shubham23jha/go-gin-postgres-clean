@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: email-publisher
-        image: email-system:latest
+        image: email-system:v1
+        imagePullPolicy: IfNotPresent
         command: ["./publisher"]
         envFrom:
         - configMapRef:
