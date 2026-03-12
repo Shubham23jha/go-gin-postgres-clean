@@ -17,7 +17,7 @@ func Register(r *gin.Engine, app *bootstrap.App) {
 	auth := api.Group("/auth")
 	{
 		// Public APIs
-		auth.POST("/signup",app.AuthHandler.Register)
+		auth.POST("/signup", app.AuthHandler.Register)
 
 		auth.POST("/login", app.AuthHandler.Login)
 

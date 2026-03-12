@@ -9,5 +9,4 @@ type UserRepository interface {
 	GetByEmail(email string) (*models.User, error)
 	GetByPhone(phoneNumber string) (*models.User, error)
 	MarkVerified(userID uint) error
-	
 }

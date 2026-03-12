@@ -6,8 +6,9 @@
 *.dylib
 
 # Test binaries
-*-test
+*-test.exe
 *.test
+*.test.exe
 
 # Output of the go coverage tool
 *.out

@@ -67,8 +67,8 @@ type RegisterRequest struct {
 }
 
 type LoginRequest struct {
-	Email    string `json:"email" `
+	Email       string `json:"email" `
 	PhoneNumber string `json:"phoneNumber"`
-	Password string `json:"password" binding:"required"`
+	Password    string `json:"password" binding:"required"`
 	DeviceID    string `json:"deviceID" binding:"required"`
-	}
+}

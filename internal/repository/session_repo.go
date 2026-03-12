@@ -30,7 +30,7 @@ func (r *sessionRepository) CountActive(
 	err := r.db.
 		Model(&models.UserSession{}).
 		Where(
-			"userID = ? AND isActive = true",
+			`"userID" = ? AND "isActive" = true`,
 			userID,
 		).
 		Count(&count).Error
@@ -55,7 +55,7 @@ func (r *sessionRepository) DeactivateByToken(
 
 	return r.db.
 		Model(&models.UserSession{}).
-		Where("refreshToken = ?", token).
+		Where(`"refreshToken" = ?`, token).
 		Update("isActive", false).Error
 }
 
@@ -64,6 +64,6 @@ func (r *sessionRepository) DeleteByUserID(
 ) error {
 
 	return r.db.
-		Where("userID = ?", userID).
+		Where(`"userID" = ?`, userID).
 		Delete(&models.UserSession{}).Error
 }

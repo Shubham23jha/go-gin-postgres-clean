@@ -16,8 +16,8 @@ type UserSession struct {
 
 	IsActive bool `gorm:"column:isActive;default:true"`
 
-	ExpiresAt time.Time  `gorm:"column:expiresAt"`
-	CreatedAt time.Time  `gorm:"column:createdAt;autoCreateTime"`
+	ExpiresAt time.Time `gorm:"column:expiresAt"`
+	CreatedAt time.Time `gorm:"column:createdAt;autoCreateTime"`
 
 	// Relation
 	User User `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
@@ -26,4 +26,3 @@ type UserSession struct {
 func (UserSession) TableName() string {
 	return "userSessions"
 }
-

@@ -19,7 +19,7 @@ func (r *userRepo) Create(user *models.User) error {
 
 func (r *userRepo) FindByEmail(email string) (*models.User, error) {
 	var user models.User
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := r.db.Where(`"email" = ?`, email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -27,7 +27,7 @@ func (r *userRepo) FindByEmail(email string) (*models.User, error) {
 
 func (r *userRepo) FindByNumber(number string) (*models.User, error) {
 	var user models.User
-	if err := r.db.Where("phoneNumber = ?", number).First(&user).Error; err != nil {
+	if err := r.db.Where(`"phoneNumber" = ?`, number).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -35,15 +35,15 @@ func (r *userRepo) FindByNumber(number string) (*models.User, error) {
 
 func (r *userRepo) GetByEmail(email string) (*models.User, error) {
 	var user models.User
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := r.db.Where(`"email" = ?`, email).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
-func (r *userRepo) GetByPhone(phoneNumber string) (*models.User, error){
+func (r *userRepo) GetByPhone(phoneNumber string) (*models.User, error) {
 	var user models.User
-	if err := r.db.Where("phoneNumber = ?", phoneNumber).First(&user).Error; err != nil {
+	if err := r.db.Where(`"phoneNumber" = ?`, phoneNumber).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -57,4 +57,3 @@ func (r *userRepo) MarkVerified(userID uint) error {
 		Update("isVerified", true).
 		Error
 }
-

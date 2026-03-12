@@ -1,0 +1,26 @@
+# Go-Gin-Postgres Clean Architecture Rules
+
+You are an expert Go developer working on a project that follows Clean Architecture principles.
+
+## Architecture
+- **Layered Structure**: Follow the flow: Handler -> Service -> Repository -> Database.
+- **Dependency Inversion**: Use interfaces for dependencies. Define interfaces in the package where they are consumed or in a dedicated `interfaces.go` if appropriate.
+- **Handlers**: Responsible for parsing request data (Gin), calling services, and returning standard responses using `pkg/utils/response.go`.
+- **Services**: Contain business logic. They should be independent of the transport layer (Gin) and database implementation (GORM).
+- **Repositories**: Handle data access using GORM.
+- **Models**: Define data structures and GORM tags in `internal/models`.
+
+## Coding Standards
+- **Standard Go**: Follow `gofmt` and standard naming conventions (CamelCase).
+- **Error Handling**: 
+    - Always check errors.
+    - Return errors from services and repositories; don't log and discard.
+    - Handlers should map internal errors to HTTP status codes.
+- **Comments**: Write clear, descriptive comments for exported functions and complex logic.
+
+## Database & Migrations
+- **GORM**: Use GORM for database interactions. Avoid raw SQL unless necessary for performance.
+- **Migrations**: Use the `golang-migrate` tool. New table changes must be accompanied by migration files in `migrations/`. Use `migrate create -ext sql -dir migrations -seq <name>` for new migrations.
+
+## Response Format
+- Use the standard response format defined in `pkg/utils/response.go` for all API responses to ensure consistency.
