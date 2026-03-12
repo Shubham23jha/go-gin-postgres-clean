@@ -5,7 +5,7 @@ description: Build the multi-stage Docker image for all services.
 
 # Docker Build Skill
 
-Use this skill to build the unified Docker image containing the API, Publisher, and Worker.
+Use this skill to build the unified Docker image containing the API, Publisher, Worker, and Scaling Dashboard.
 
 ## Usage
 

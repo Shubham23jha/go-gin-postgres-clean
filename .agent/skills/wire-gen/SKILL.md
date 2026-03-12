@@ -21,6 +21,13 @@ cd internal/bootstrap; wire
 cd internal/service; wire
 ```
 
+### 3. Generate for repositories and handlers
+// turbo
+```powershell
+cd internal/repository; wire
+cd internal/handlers; wire
+```
+
 ## When to use
 - After adding a new dependency to a `New...` constructor.
 - After adding a new provider to a `wire.Build` call.
