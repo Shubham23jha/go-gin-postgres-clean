@@ -1,22 +1,20 @@
 -- USERS
 CREATE TABLE users (
-  "ID" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
 
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
+  first_name VARCHAR,
+  last_name VARCHAR,
 
-  "email" VARCHAR UNIQUE,
-  "phoneNumber" VARCHAR UNIQUE,
+  email VARCHAR UNIQUE,
+  phone_number VARCHAR UNIQUE,
 
-  "password" VARCHAR NOT NULL,
-  "accountName" VARCHAR,
+  password VARCHAR NOT NULL,
+  account_name VARCHAR,
 
-  "isVerified" BOOLEAN DEFAULT FALSE,
-  "role" VARCHAR DEFAULT 'user',
-  "createdAt" TIMESTAMP DEFAULT NOW(),
-  "updatedAt" TIMESTAMP DEFAULT NOW(),
+  is_verified BOOLEAN DEFAULT FALSE,
+  role VARCHAR DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
 
-  CONSTRAINT users_email_phone_unique UNIQUE ("email", "phoneNumber")
+  CONSTRAINT users_email_phone_unique UNIQUE (email, phone_number)
 );
-
-

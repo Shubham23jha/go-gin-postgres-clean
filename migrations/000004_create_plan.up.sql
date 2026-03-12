@@ -1,8 +1,8 @@
 CREATE TABLE plan (
-  "ID" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
 
-  "planType" VARCHAR,
-  "featureJson" JSON,
+  plan_type VARCHAR,
+  feature_json JSON,
 
-  "isActive" BOOLEAN DEFAULT TRUE
+  is_active BOOLEAN DEFAULT TRUE
 );

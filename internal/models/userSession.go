@@ -3,26 +3,26 @@ package models
 import "time"
 
 type UserSession struct {
-	ID uint `gorm:"column:ID;primaryKey;autoIncrement"`
+	ID uint `gorm:"primaryKey;autoIncrement"`
 
-	UserID uint `gorm:"column:userID;not null;index:idx_user_device,priority:1"`
+	UserID uint `gorm:"not null;index:idx_user_device,priority:1"`
 
-	RefreshToken string `gorm:"column:refreshToken;uniqueIndex;not null"`
+	RefreshToken string `gorm:"uniqueIndex;not null"`
 
-	DeviceID   string `gorm:"column:deviceID;index:idx_user_device,priority:2"`
-	DeviceName string `gorm:"column:deviceName"`
-	Browser    string `gorm:"column:browser"`
-	IPAddress  string `gorm:"column:ipAddress"`
+	DeviceID   string `gorm:"index:idx_user_device,priority:2"`
+	DeviceName string
+	Browser    string
+	IPAddress  string
 
-	IsActive bool `gorm:"column:isActive;default:true"`
+	IsActive bool `gorm:"default:true"`
 
-	ExpiresAt time.Time `gorm:"column:expiresAt"`
-	CreatedAt time.Time `gorm:"column:createdAt;autoCreateTime"`
+	ExpiresAt time.Time
+	CreatedAt time.Time `gorm:"autoCreateTime"`
 
 	// Relation
 	User User `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
 func (UserSession) TableName() string {
-	return "userSessions"
+	return "user_sessions"
 }

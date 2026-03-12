@@ -3,12 +3,15 @@ package integration
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
+	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/routes"
 	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
 	"github.com/gin-gonic/gin"
@@ -82,4 +85,60 @@ func TestAuthFlow(t *testing.T) {
 		}
 		assert.True(t, found, "refresh_token cookie should be set")
 	})
+}
+func TestSessionLimit(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+
+	app, err := bootstrap.InitializeApp(database.DB)
+	assert.NoError(t, err)
+
+	routes.Register(router, app)
+
+	email := "limit@example.com"
+	password := "password123"
+
+	// 1. Register
+	signupPayload := models.RegisterRequest{
+		FirstName:   "Limit",
+		LastName:    "User",
+		Email:       email,
+		PhoneNumber: "9999999999",
+		Password:    password,
+	}
+	body, _ := json.Marshal(signupPayload)
+	reqSignup, _ := http.NewRequest("POST", "/api/auth/signup", bytes.NewBuffer(body))
+	wSignup := httptest.NewRecorder()
+	router.ServeHTTP(wSignup, reqSignup)
+	assert.Equal(t, 200, wSignup.Code)
+
+	// 2. Login 3 times with different device IDs
+	for i := 1; i <= 3; i++ {
+		loginPayload := models.LoginRequest{
+			Email:    email,
+			Password: password,
+			DeviceID: fmt.Sprintf("device-%d", i),
+		}
+		loginBody, _ := json.Marshal(loginPayload)
+		reqLogin, _ := http.NewRequest("POST", "/api/auth/login", bytes.NewBuffer(loginBody))
+		wLogin := httptest.NewRecorder()
+		router.ServeHTTP(wLogin, reqLogin)
+
+		assert.Equal(t, 200, wLogin.Code, "Login %d should succeed", i)
+		time.Sleep(time.Second) // Ensure different IssuedAt for tokens
+	}
+
+	// 3. 4th Login should fail with 401 and "device limit reached"
+	finalLoginPayload := models.LoginRequest{
+		Email:    email,
+		Password: password,
+		DeviceID: "device-4",
+	}
+	finalLoginBody, _ := json.Marshal(finalLoginPayload)
+	reqFinal, _ := http.NewRequest("POST", "/api/auth/login", bytes.NewBuffer(finalLoginBody))
+	wFinal := httptest.NewRecorder()
+	router.ServeHTTP(wFinal, reqFinal)
+
+	assert.Equal(t, 401, wFinal.Code)
+	assert.Contains(t, wFinal.Body.String(), "device limit reached")
 }

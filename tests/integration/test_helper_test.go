@@ -16,13 +16,19 @@ import (
 var testDBURL = "postgres://user:password@localhost:5433/testdb?sslmode=disable"
 
 func cleanupDB(db *gorm.DB) {
-	tables := []string{"userSessions", "users"}
+	tables := []string{"user_sessions", "users"}
 	for _, table := range tables {
 		db.Exec(`TRUNCATE TABLE "` + table + `" CASCADE`)
 	}
 	log.Println("🧹 Test database cleaned")
 }
 
+// TestMain handles the setup and teardown for all integration tests.
+// DB Lifecycle:
+// 1. Reset: The schema is completely dropped and recreated on every run (avoids dirty states).
+// 2. Migrate: migrations are applied fresh.
+// 3. Clean: Truncates data tables before the suite starts.
+// 4. Persist: Data remains in the DB after tests finish to allow manual inspection/debugging.
 func TestMain(m *testing.M) {
 	// Set environment variables for the test environment
 	os.Setenv("DB_HOST", "localhost")
@@ -38,6 +44,14 @@ func TestMain(m *testing.M) {
 	migrationPath := "../../"
 	if _, err := os.Stat("../../migrations"); os.IsNotExist(err) {
 		migrationPath = "./"
+	}
+
+	// Initialize global DB connection for total reset
+	dbReset, err := gorm.Open(postgres.Open(testDBURL), &gorm.Config{})
+	if err == nil {
+		// Drop everything to fix dirty states
+		dbReset.Exec(`DROP SCHEMA public CASCADE; CREATE SCHEMA public;`)
+		log.Println("♻️ Database schema reset")
 	}
 
 	mSub, err := migrate.New(

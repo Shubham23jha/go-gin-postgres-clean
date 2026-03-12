@@ -1,14 +1,14 @@
 CREATE TABLE payment (
-  "ID" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
 
-  "userID" INT NOT NULL
-    REFERENCES users("ID"),
+  user_id INT NOT NULL
+    REFERENCES users(id),
 
-  "paymentAmount" DECIMAL(10,2),
+  payment_amount DECIMAL(10,2),
   status VARCHAR,
 
-  "planID" INT
-    REFERENCES plan("ID"),
+  plan_id INT
+    REFERENCES plan(id),
 
-  "createdAt" TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW()
 );

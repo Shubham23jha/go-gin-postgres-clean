@@ -1,16 +1,16 @@
 CREATE TABLE subscription (
-  "ID" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
 
-  "userID" INT NOT NULL
-    REFERENCES users("ID"),
+  user_id INT NOT NULL
+    REFERENCES users(id),
 
-  "paymentID" INT
-    REFERENCES payment("ID"),
+  payment_id INT
+    REFERENCES payment(id),
 
-  "startDate" TIMESTAMP,
-  "endDate" TIMESTAMP,
+  start_date TIMESTAMP,
+  end_date TIMESTAMP,
 
-  "isActive" BOOLEAN DEFAULT TRUE,
+  is_active BOOLEAN DEFAULT TRUE,
 
-  "createdAt" TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW()
 );

@@ -20,7 +20,10 @@ You are an expert Go developer working on a project that follows Clean Architect
 
 ## Database & Migrations
 - **GORM**: Use GORM for database interactions. Avoid raw SQL unless necessary for performance.
-- **Migrations**: Use the `golang-migrate` tool. New table changes must be accompanied by migration files in `migrations/`. Use `migrate create -ext sql -dir migrations -seq <name>` for new migrations.
+- **Naming Conventions**:
+    - **Database**: Use `snake_case` for all table and column names (e.g., `user_sessions`, `first_name`).
+    - **Models**: Let GORM handle the conversion from `CamelCase` struct fields to `snake_case` columns. Avoid explicit `column` tags unless necessary for overrides.
+- **Migrations**: Use the `golang-migrate` tool. New table changes must be accompanied by migration files in `migrations/`.
 
 ## Response Format
 - Use the standard response format defined in `pkg/utils/response.go` for all API responses to ensure consistency.

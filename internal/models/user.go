@@ -8,23 +8,23 @@ import (
 )
 
 type User struct {
-	ID uint `gorm:"column:ID;primaryKey;autoIncrement"`
+	ID uint `gorm:"primaryKey;autoIncrement"`
 
-	FirstName string `gorm:"column:firstName"`
-	LastName  string `gorm:"column:lastName"`
+	FirstName string
+	LastName  string
 
-	Email       string `gorm:"column:email;uniqueIndex:users_email_phone_unique"`
-	PhoneNumber string `gorm:"column:phoneNumber;uniqueIndex:users_email_phone_unique"`
+	Email       string `gorm:"uniqueIndex:users_email_phone_unique"`
+	PhoneNumber string `gorm:"uniqueIndex:users_email_phone_unique"`
 
-	Password string `gorm:"column:password;not null"`
+	Password string `gorm:"not null"`
 
-	AccountName string `gorm:"column:accountName"`
+	AccountName string
 
-	IsVerified bool   `gorm:"column:isVerified;default:false"`
-	Role       string `gorm:"column:role;default:user"`
+	IsVerified bool   `gorm:"default:false"`
+	Role       string `gorm:"default:user"`
 
-	CreatedAt time.Time `gorm:"column:createdAt;autoCreateTime"`
-	UpdatedAt time.Time `gorm:"column:updatedAt;autoUpdateTime"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

@@ -47,6 +47,7 @@ func GenerateRefreshToken(userID uint, email string) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(
 				time.Now().Add(7 * 24 * time.Hour),
 			),
+			IssuedAt: jwt.NewNumericDate(time.Now()),
 		},
 	}
 

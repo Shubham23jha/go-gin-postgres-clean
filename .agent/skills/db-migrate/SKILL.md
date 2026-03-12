@@ -33,7 +33,6 @@ Requires `DB_URL` environment variable.
 migrate -path migrations -database "${DB_URL}" version
 ```
 
-### Use helper script (if applicable)
-```bash
-./scripts/migrate.sh
-```
+### Naming Conventions
+- Always use `snake_case` for all table and column names.
+- New migrations should avoid using double quotes for identifiers to stay consistent with the current schema.
