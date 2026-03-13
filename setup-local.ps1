@@ -12,11 +12,11 @@ Write-Host "🏗️  Deploying Infrastructure (Postgres & RabbitMQ)..." -Foregro
 kubectl apply -f k8s/infrastructure.yaml
 
 # 3. Build & Load Application
-Write-Host "🛠️  Building Application Image (v2)..." -ForegroundColor Yellow
-docker build -t email-system:v2 .
+Write-Host "🛠️  Building Application Image (v3)..." -ForegroundColor Yellow
+docker build -t email-system:v3 .
 
 Write-Host "🚚 Loading image into Minikube..." -ForegroundColor Yellow
-minikube image load email-system:v2
+minikube image load email-system:v3
 
 # 4. Deploy Application
 Write-Host "🚀 Deploying Application Services..." -ForegroundColor Yellow
