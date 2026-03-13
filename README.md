@@ -53,13 +53,13 @@ kubectl apply -f k8s/infrastructure.yaml
 ```
 
 ### 3. Build & Load Application
-Build the unified Docker image (current version: **v2**) and load it:
+Build the unified Docker image (current version: **v4**) and load it:
 ```bash
 # Build image
-docker build -t email-system:v2 .
+docker build -t email-system:v4 .
 
 # If using Minikube
-minikube image load email-system:v2
+minikube image load email-system:v4
 ```
 
 ### 4. Deploy Application
@@ -107,16 +107,20 @@ curl.exe -X POST <API_URL>/api/campaigns/ `
 
 ## 📁 Project Structure
 
-- `cmd/`: Entrypoints for API, Publisher, Worker, and Dashboard.
-- `k8s/`: Kubernetes Manifests (Deployments, Config, KEDA).
-- `internal/`: Core business logic, Handlers, Models, and Repositories.
-- `migrations/`: SQL database schema migrations.
-- `.agents/`: AI Agent Skills (Automated DB migrations, K8s deploys, etc.).
+- `cmd/server/`: API entrypoint and **Campaign Trigger UI** (`web/`).
+- `cmd/dashboard/`: **Scaling Monitor** entrypoint and its UI (`web/`).
+- `cmd/publisher/`: Transactional Outbox worker.
+- `cmd/worker/`: Email delivery consumer.
+- `k8s/`: Kubernetes manifests (Deployments, HPA, KEDA ScaledObjects).
+- `internal/`: Core logic, models, and PostgreSQL repositories.
+- `migrations/`: SQL migration files.
+- `.agents/skills/`: Custom AI Agent Skills (One-click setup, deploys, etc.).
 
 ---
 
-## 🛠️ Maintenance (AI Agent Skills)
-This repository is optimized for AI assistance. Skills in `.agents/skills/` include:
-- `db-migrate`: Manage SQL schema.
-- `k8s-deploy`: Orchestrate cluster resources.
-- `wire-gen`: Regenerate dependency injection code.
+## 🛠️ AI Agent Tools (Skills)
+This repository is optimized for AI assistance. You can ask an agent to:
+- `/local-setup`: Run the entire deployment automatically.
+- `/db-migrate`: Automatically apply new database changes.
+- `/wire-gen`: Regenerate Go dependencies.
+- `/go-test`: Run all unit and integration tests.
