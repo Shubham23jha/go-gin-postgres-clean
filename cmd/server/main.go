@@ -57,8 +57,8 @@ func main() {
 	routes.Register(r, app)
 
 	// Serve Static UI
-	r.Static("/static", "./web")
-	r.StaticFile("/", "./web/index.html")
+	r.Static("/static", "./web-server")
+	r.StaticFile("/", "./web-server/index.html")
 
 	// In Distributed Mode (K8s), these will run as separate pods.
 	// For local development, we can still start them if needed.

@@ -33,7 +33,7 @@ func main() {
 	defer amqpCh.Close()
 
 	// 2. Serve Frontend and API
-	http.Handle("/", http.FileServer(http.Dir("./web")))
+	http.Handle("/", http.FileServer(http.Dir("./web-dashboard")))
 	http.HandleFunc("/api/stats", statsHandler)
 
 	port := os.Getenv("PORT")

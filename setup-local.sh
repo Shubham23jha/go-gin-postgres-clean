@@ -14,11 +14,11 @@ echo "🏗️  Deploying Infrastructure (Postgres & RabbitMQ)..."
 kubectl apply -f k8s/infrastructure.yaml
 
 # 3. Build & Load Application
-echo "🛠️  Building Application Image (v3)..."
-docker build -t email-system:v3 .
+echo "🛠️  Building Application Image (v4)..."
+docker build -t email-system:v4 .
 
 echo "🚚 Loading image into Minikube..."
-minikube image load email-system:v3
+minikube image load email-system:v4
 
 # 4. Deploy Application
 echo "🚀 Deploying Application Services..."

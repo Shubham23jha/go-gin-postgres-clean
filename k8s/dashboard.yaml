@@ -48,7 +48,7 @@ spec:
       serviceAccountName: dashboard-sa
       containers:
       - name: dashboard
-        image: email-system:v1
+        image: email-system:v4
         imagePullPolicy: IfNotPresent
         command: ["./dashboard"]
         env:
