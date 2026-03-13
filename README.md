@@ -14,11 +14,24 @@ The system uses the **Transactional Outbox Pattern** to ensure "at-least-once" d
 5.  **KEDA**: Automatically scales Worker pods from **0 to 10** based on queue length.
 6.  **📊 Scaling Dashboard**: A real-time monitoring UI that visualizes queue growth and worker pod scaling.
 
+## 🚀 Quick Start (Automated)
+
+Run the project with a single command based on your terminal:
+
+**For BASH (Git Bash, WSL, Linux):**
+```bash
+chmod +x setup-local.sh
+./setup-local.sh
+```
+
+**For POWERSHELL:**
+```powershell
+.\setup-local.ps1
+```
+
 ---
 
-## 🚀 Step-by-Step Local Setup
-
-To showcase the full system with autoscaling, follow these steps:
+## 🚀 Step-by-Step Manual Setup
 
 ### 1. Pre-requisites
 - **Docker Desktop** (Kubernetes enabled) or **Minikube**.
