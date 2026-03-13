@@ -30,6 +30,7 @@ COPY --from=builder /app/publisher .
 COPY --from=builder /app/worker .
 COPY --from=builder /app/dashboard .
 COPY --from=builder /app/cmd/dashboard/web ./web
+COPY --from=builder /app/cmd/server/web ./web
 COPY --from=builder /app/migrations ./migrations
 
 # We don't set a default CMD here because we will override it in K8s/Docker-Compose

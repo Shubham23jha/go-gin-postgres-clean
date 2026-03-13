@@ -31,7 +31,13 @@ chmod +x setup-local.sh
 
 ---
 
-## 🚀 Step-by-Step Manual Setup
+## 🎨 Campaign Trigger UI (New!)
+You can now trigger campaigns directly from a beautiful web interface.
+1.  **Get the URL**: Run `minikube service email-api --url`
+2.  **Open in Browser**: Navigate to that URL (e.g., `http://127.0.0.1:55321/`).
+3.  **Trigger**: Enter the number of users and click **"Start Campaign"**.
+
+---
 
 ### 1. Pre-requisites
 - **Docker Desktop** (Kubernetes enabled) or **Minikube**.
