@@ -3,6 +3,7 @@ package repository
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
 	"gorm.io/gorm"
@@ -13,6 +14,8 @@ type CampaignRepository interface {
 	FindByID(id uint) (*models.Campaign, error)
 	FetchPendingOutbox(limit int) ([]models.Outbox, error)
 	UpdateOutboxStatus(id uint, status models.OutboxStatus) error
+	UpdateOutboxFailure(id uint, errMsg string, retryCount int) error
+	ReclaimStalledOutbox(timeoutMinutes int) (int64, error)
 	CreateEmailLog(log *models.EmailLog) error
 	IsMessageProcessed(messageID string) (bool, error)
 	FindAll() ([]models.Campaign, error)
@@ -72,6 +75,22 @@ func (r *campaignRepository) FetchPendingOutbox(limit int) ([]models.Outbox, err
 
 func (r *campaignRepository) UpdateOutboxStatus(id uint, status models.OutboxStatus) error {
 	return r.db.Model(&models.Outbox{}).Where("id = ?", id).Update("status", status).Error
+}
+
+func (r *campaignRepository) UpdateOutboxFailure(id uint, errMsg string, retryCount int) error {
+	return r.db.Model(&models.Outbox{}).Where("id = ?", id).Updates(map[string]interface{}{
+		"status":      models.OutboxStatusFailed,
+		"last_error":  errMsg,
+		"retry_count": retryCount,
+	}).Error
+}
+
+func (r *campaignRepository) ReclaimStalledOutbox(timeoutMinutes int) (int64, error) {
+	// Move PICKED_UP items back to PENDING if they haven't been updated for X minutes
+	result := r.db.Model(&models.Outbox{}).
+		Where("status = ? AND updated_at < ?", models.OutboxStatusPickedUp, time.Now().Add(-time.Duration(timeoutMinutes)*time.Minute)).
+		Update("status", models.OutboxStatusPending)
+	return result.RowsAffected, result.Error
 }
 
 func (r *campaignRepository) CreateEmailLog(emailLog *models.EmailLog) error {

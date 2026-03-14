@@ -132,7 +132,7 @@ func (s *userService) LoginWithEmail(email string, password string, deviceID str
 	session := &models.UserSession{
 		UserID:       user.ID,
 		RefreshToken: refreshToken,
-		DeviceID:     deviceID,
+		DeviceID:     deviceID, 
 		DeviceName:   deviceName,
 		Browser:      browser,
 		IPAddress:    ip,

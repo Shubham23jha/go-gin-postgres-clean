@@ -30,7 +30,14 @@ Write-Host "---------------------------------------------------" -ForegroundColo
 Write-Host "📊 Opening Dashboard..." -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "minikube service scaling-dashboard-service --url"
 
-Write-Host "📧 Fetching API URL..." -ForegroundColor Cyan
+Write-Host "📧 Fetching API URL (Dynamic)..." -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "minikube service email-api --url"
+
+Write-Host ""
+Write-Host "✨ BETTER SOLUTION (Static Port):" -ForegroundColor Green
+Write-Host "To use a permanent URL that never changes, run this in a new terminal:" -ForegroundColor White
+Write-Host "👉 kubectl port-forward svc/email-api 8080:80" -ForegroundColor Yellow
+Write-Host "Then use: http://127.0.0.1:8080" -ForegroundColor White
+Write-Host ""
 
 Write-Host "💡 Follow the instructions in README.md to trigger a scaling demo!" -ForegroundColor Gray

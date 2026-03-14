@@ -14,6 +14,13 @@ The system uses the **Transactional Outbox Pattern** to ensure "at-least-once" d
 5.  **KEDA**: Automatically scales Worker pods from **0 to 10** based on queue length.
 6.  **📊 Scaling Dashboard**: A real-time monitoring UI that visualizes queue growth and worker pod scaling.
 
+## 🛡️ Resilience & Reliability
+The system is designed to handle infrastructure failures and ensure zero message loss:
+- **RabbitMQ Reconnection**: Services (Publisher & Worker) automatically detect connection loss and reconnect with exponential backoff.
+- **Transactional Outbox**: Guaranteed "at-least-once" delivery by marking items as `PUBLISHED` only after successful RabbitMQ ack.
+- **Stalled Item Reclaimer**: A background task automatically finds and re-processes outbox items stuck in `PICKED_UP` status (e.g., due to service crashes).
+- **Worker Retries**: Email workers use exponential backoff for SMTP failures and safely handle message retries via DLX.
+
 ## 🚀 Quick Start (Automated)
 
 Run the project with a single command based on your terminal:
@@ -36,6 +43,11 @@ You can now trigger campaigns directly from a beautiful web interface.
 1.  **Get the URL**: Run `minikube service email-api --url`
 2.  **Open in Browser**: Navigate to that URL (e.g., `http://127.0.0.1:55321/`).
 3.  **Trigger**: Enter the number of users and click **"Start Campaign"**.
+
+### 🔗 Accessing from External Projects (Static Port)
+If you are calling this API from another project (like a Node.js server), use a static port to avoid URL changes:
+1.  Run: `kubectl port-forward svc/email-api 8080:80`
+2.  Use URL: `http://127.0.0.1:8080`
 
 ---
 
@@ -124,3 +136,19 @@ This repository is optimized for AI assistance. You can ask an agent to:
 - `/db-migrate`: Automatically apply new database changes.
 - `/wire-gen`: Regenerate Go dependencies.
 - `/go-test`: Run all unit and integration tests.
+- `/email-resilience`: Understand and manage email delivery reliability.
+
+---
+
+## 👁️ Database Visibility
+To see exactly what's happening inside the resilient database:
+```bash
+# List all campaigns
+kubectl exec deployment/postgres -- psql -U postgres -d goDb -c "SELECT * FROM campaigns;"
+
+# List the outbox (queuing status)
+kubectl exec deployment/postgres -- psql -U postgres -d goDb -c "SELECT * FROM outbox;"
+
+# List actual email logs (success/fail)
+kubectl exec deployment/postgres -- psql -U postgres -d goDb -c "SELECT * FROM email_logs;"
+```

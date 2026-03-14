@@ -30,7 +30,14 @@ echo "---------------------------------------------------"
 echo "📊 Dashboard URL:"
 minikube service scaling-dashboard-service --url &
 
-echo "📧 API URL:"
+echo "📧 API URL (Dynamic):"
 minikube service email-api --url &
+
+echo ""
+echo "✨ BETTER SOLUTION (Static Port):"
+echo "To use a permanent URL that never changes, run this in a new terminal:"
+echo "👉 kubectl port-forward svc/email-api 8080:80"
+echo "Then use: http://127.0.0.1:8080"
+echo ""
 
 echo "💡 Follow the instructions in README.md to trigger a scaling demo!"
