@@ -1,8 +1,9 @@
+// Package bootstrap handles the application initialization and dependency injection.
 package bootstrap
 
 import (
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/handlers"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
+	"github.com/Shubham23jha/digital-post-office/internal/handlers"
+	"github.com/Shubham23jha/digital-post-office/internal/service"
 )
 
 type App struct {

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: email-publisher
-        image: email-system:v4
+        image: digital-post-office:v1
         imagePullPolicy: IfNotPresent
         command: ["./publisher"]
         envFrom:

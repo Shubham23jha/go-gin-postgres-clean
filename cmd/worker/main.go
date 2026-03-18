@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/config"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
+	"github.com/Shubham23jha/digital-post-office/config"
+	"github.com/Shubham23jha/digital-post-office/internal/bootstrap"
+	"github.com/Shubham23jha/digital-post-office/pkg/database"
 )
 
 func main() {

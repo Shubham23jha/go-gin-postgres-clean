@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
+	"github.com/Shubham23jha/digital-post-office/internal/models"
+	"github.com/Shubham23jha/digital-post-office/internal/service"
 	"github.com/gin-gonic/gin"
 )
 

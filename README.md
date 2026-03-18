@@ -1,4 +1,4 @@
-# Distributed Email Delivery System (Mini-Mailchimp) 📧🚀
+# Digital Post Office 📧🚀
 
 A robust, high-throughput email delivery system built with **Go**, **Postgres**, **RabbitMQ**, and orchestrated with **Kubernetes** + **KEDA**. Featuring a real-time **Scaling Visualization Dashboard**.
 
@@ -65,13 +65,13 @@ kubectl apply -f k8s/infrastructure.yaml
 ```
 
 ### 3. Build & Load Application
-Build the unified Docker image (current version: **v4**) and load it:
+Build the unified Docker image (current version: **v1**) and load it:
 ```bash
 # Build image
-docker build -t email-system:v4 .
+docker build -t digital-post-office:v1 .
 
 # If using Minikube
-minikube image load email-system:v4
+minikube image load digital-post-office:v1
 ```
 
 ### 4. Deploy Application

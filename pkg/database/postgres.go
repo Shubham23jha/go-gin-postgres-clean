@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/config"
+	"github.com/Shubham23jha/digital-post-office/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

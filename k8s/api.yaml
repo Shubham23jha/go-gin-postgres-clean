@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: email-api
-        image: email-system:v4
+        image: digital-post-office:v1
         imagePullPolicy: IfNotPresent
         command: ["./api-server"]
         ports:

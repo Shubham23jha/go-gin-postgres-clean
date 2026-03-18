@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
+	"github.com/Shubham23jha/digital-post-office/pkg/database"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"

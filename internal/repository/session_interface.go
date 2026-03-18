@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
+import "github.com/Shubham23jha/digital-post-office/internal/models"
 
 type SessionRepository interface {
 	Create(session *models.UserSession) error

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/utils"
+	"github.com/Shubham23jha/digital-post-office/internal/models"
+	"github.com/Shubham23jha/digital-post-office/internal/service"
+	"github.com/Shubham23jha/digital-post-office/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
 )

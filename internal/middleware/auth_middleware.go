@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/utils"
+	"github.com/Shubham23jha/digital-post-office/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 

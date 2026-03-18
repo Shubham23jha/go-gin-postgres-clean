@@ -1,6 +1,7 @@
+// Package service provides the business logic for the digital post office.
 package service
 
-import "github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
+import "github.com/Shubham23jha/digital-post-office/internal/models"
 
 type SessionService interface {
 	CreateSession(

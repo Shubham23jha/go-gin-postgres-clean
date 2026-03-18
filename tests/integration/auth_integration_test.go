@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/routes"
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
+	"github.com/Shubham23jha/digital-post-office/internal/bootstrap"
+	"github.com/Shubham23jha/digital-post-office/internal/models"
+	"github.com/Shubham23jha/digital-post-office/internal/routes"
+	"github.com/Shubham23jha/digital-post-office/pkg/database"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )

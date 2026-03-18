@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Distributed Email Delivery System - Local Setup Script (BASH)
+# Digital Post Office - Local Setup Script (BASH)
 # This script automates the infrastructure setup, building, and deployment.
 
 echo "🚀 Starting Automated Setup..."
@@ -15,10 +15,10 @@ kubectl apply -f k8s/infrastructure.yaml
 
 # 3. Build & Load Application
 echo "🛠️  Building Application Image (v4)..."
-docker build -t email-system:v4 .
+docker build -t digital-post-office:v1 .
 
 echo "🚚 Loading image into Minikube..."
-minikube image load email-system:v4
+minikube image load digital-post-office:v1
 
 # 4. Deploy Application
 echo "🚀 Deploying Application Services..."

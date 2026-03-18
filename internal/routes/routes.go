@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/middleware"
+	"github.com/Shubham23jha/digital-post-office/internal/bootstrap"
+	"github.com/Shubham23jha/digital-post-office/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 

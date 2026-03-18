@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
+	"github.com/Shubham23jha/digital-post-office/internal/models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type CampaignRepository interface {
@@ -69,7 +70,13 @@ func (r *campaignRepository) FindByID(id uint) (*models.Campaign, error) {
 
 func (r *campaignRepository) FetchPendingOutbox(limit int) ([]models.Outbox, error) {
 	var items []models.Outbox
-	err := r.db.Where("status = ?", models.OutboxStatusPending).Limit(limit).Find(&items).Error
+	err := r.db.Clauses(clause.Locking{
+		Strength: "UPDATE",
+		Options:  "SKIP LOCKED",
+	}).
+		Where("status = ?", models.OutboxStatusPending).
+		Limit(limit).
+		Find(&items).Error
 	return items, err
 }
 

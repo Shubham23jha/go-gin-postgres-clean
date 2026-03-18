@@ -1,3 +1,4 @@
+// Package service provides the business logic for the digital post office.
 package service
 
 import (

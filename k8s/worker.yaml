@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: email-worker
-        image: email-system:v4
+        image: digital-post-office:v1
         imagePullPolicy: IfNotPresent
         command: ["./worker"]
         envFrom:

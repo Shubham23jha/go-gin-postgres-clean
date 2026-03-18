@@ -1,4 +1,4 @@
-# Distributed Email Delivery System - Local Setup Script (PowerShell)
+# Digital Post Office - Local Setup Script (PowerShell)
 # This script automates the infrastructure setup, building, and deployment.
 
 Write-Host "🚀 Starting Automated Setup..." -ForegroundColor Cyan
@@ -13,10 +13,10 @@ kubectl apply -f k8s/infrastructure.yaml
 
 # 3. Build & Load Application
 Write-Host "🛠️  Building Application Image (v4)..." -ForegroundColor Yellow
-docker build -t email-system:v4 .
+docker build -t digital-post-office:v1 .
 
 Write-Host "🚚 Loading image into Minikube..." -ForegroundColor Yellow
-minikube image load email-system:v4
+minikube image load digital-post-office:v1
 
 # 4. Deploy Application
 Write-Host "🚀 Deploying Application Services..." -ForegroundColor Yellow

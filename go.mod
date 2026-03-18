@@ -1,4 +1,4 @@
-module github.com/Shubham23jha/go-gin-postgres-clean
+module github.com/Shubham23jha/digital-post-office
 
 go 1.24.0
 

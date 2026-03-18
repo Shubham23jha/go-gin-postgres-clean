@@ -4,12 +4,13 @@
 //go:build !wireinject
 // +build !wireinject
 
+// Package bootstrap handles the application initialization and dependency injection.
 package bootstrap
 
 import (
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/handlers"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/repository"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
+	"github.com/Shubham23jha/digital-post-office/internal/handlers"
+	"github.com/Shubham23jha/digital-post-office/internal/repository"
+	"github.com/Shubham23jha/digital-post-office/internal/service"
 	"gorm.io/gorm"
 )
 

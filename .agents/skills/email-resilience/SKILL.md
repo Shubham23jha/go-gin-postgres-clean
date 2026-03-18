@@ -3,7 +3,7 @@ name: email-resilience
 description: Understand and manage the resilience features of the email delivery system.
 ---
 
-# Email Resilience Skill
+# Digital Post Office Resilience Skill
 
 Use this skill to understand how the system handles failures and how to monitor its reliability.
 

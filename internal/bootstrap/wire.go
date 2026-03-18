@@ -7,9 +7,9 @@ import (
 	"github.com/google/wire"
 	"gorm.io/gorm"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/handlers"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/repository"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/service"
+	"github.com/Shubham23jha/digital-post-office/internal/handlers"
+	"github.com/Shubham23jha/digital-post-office/internal/repository"
+	"github.com/Shubham23jha/digital-post-office/internal/service"
 )
 
 func InitializeApp(db *gorm.DB) (*App, error) {

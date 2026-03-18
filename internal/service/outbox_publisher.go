@@ -1,3 +1,4 @@
+// Package service provides the business logic for the digital post office.
 package service
 
 import (
@@ -6,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/models"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/repository"
+	"github.com/Shubham23jha/digital-post-office/internal/models"
+	"github.com/Shubham23jha/digital-post-office/internal/repository"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 

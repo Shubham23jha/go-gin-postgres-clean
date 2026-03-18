@@ -1,16 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/Shubham23jha/go-gin-postgres-clean/config"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/bootstrap"
-	"github.com/Shubham23jha/go-gin-postgres-clean/internal/routes"
-	"github.com/Shubham23jha/go-gin-postgres-clean/pkg/database"
+	"github.com/Shubham23jha/digital-post-office/config"
+	"github.com/Shubham23jha/digital-post-office/internal/bootstrap"
+	"github.com/Shubham23jha/digital-post-office/internal/routes"
+	"github.com/Shubham23jha/digital-post-office/pkg/database"
 )
 
 func main() {
@@ -64,8 +65,8 @@ func main() {
 	// For local development, we can still start them if needed.
 	if config.GetEnv("RUN_BACKGROUND_SERVICES") == "true" {
 		log.Println("⏳ Starting background services (Monolith Mode)...")
-		go app.Publisher.Start(nil)
-		go app.WorkerPool.Start(nil)
+		go app.Publisher.Start(context.TODO())
+		go app.WorkerPool.Start(context.TODO())
 	}
 
 	r.Run(":" + config.GetEnv("PORT"))
